@@ -17,6 +17,7 @@ Route::post('login', [RegisterController::class, 'login']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('frete/cotacao', [QuoteController::class, 'getQuote']);
+    Route::get('frete/cotacao/{quoteId}', [QuoteController::class, 'getQuoteById']);
     Route::get('frete/usuario/{userId}/cotacoes', [QuoteController::class, 'getQuoteByUserId']);
 
 });

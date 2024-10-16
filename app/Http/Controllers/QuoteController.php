@@ -60,4 +60,19 @@ class QuoteController extends Controller
         return response()->json($userQuotes, 200); // Retorna as cotações com código 200
 
     }
+
+    public function getQuoteById($quoteId)
+    {
+        $validator = Validator::make(['quoteId' => $quoteId], [
+            'quoteId' => 'required|integer', // Verifica se o user_id existe na tabela de usuários
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400); // Retorna os erros de validação
+        }
+
+        $quota = VtexShippingRate::find($quoteId);
+
+        dd($quota);
+    }
 }
