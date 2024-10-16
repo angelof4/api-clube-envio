@@ -1,66 +1,153 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Clube Envio API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Descrição
 
-## About Laravel
+A API do Clube Envio oferece funcionalidades para o gerenciamento de cotações de frete. Através dela, os usuários podem registrar-se, fazer login e obter cotações de frete baseadas em suas informações.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Rotas da API
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Registro e Autenticação
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Registrar um novo usuário**
+  - `POST /register`
+  - Corpo da requisição:
+    ```json
+    {
+      "name": "Nome do Usuário",
+      "email": "usuario@example.com",
+      "password": "senha"
+    }
+    ```
 
-## Learning Laravel
+- **Login do usuário**
+  - `POST /login`
+  - Corpo da requisição:
+    ```json
+    {
+      "email": "usuario@example.com",
+      "password": "senha"
+    }
+    ```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Rotas Protegidas (Autenticação Necessária)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Essas rotas estão agrupadas pelo middleware `sanctum`, então será necessária autenticação para acessá-las.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- **Obter informações do usuário autenticado**
+  - `GET /user`
 
-## Laravel Sponsors
+- **Cotação de frete**
+  - `GET /frete/cotacao`
+  - Parâmetros: 
+    - Peso do pacote e CEP de destino devem ser passados na requisição.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- **Obter cotação específica**
+  - `GET /frete/cotacao/{quoteId}`
+  - Parâmetros:
+    - `quoteId`: ID da cotação desejada.
 
-### Premium Partners
+- **Obter cotações de um usuário**
+  - `GET /frete/usuario/{userId}/cotacoes`
+  - Parâmetros:
+    - `userId`: ID do usuário cujas cotações devem ser recuperadas.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## Autenticação
 
-## Contributing
+Para autenticar a API, utilize o Laravel Sanctum. Certifique-se de incluir o token de autenticação nas requisições para as rotas protegidas.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Tecnologias Utilizadas
 
-## Code of Conduct
+- Laravel 11
+- Laravel Sanctum para autenticação
+- Eloquent ORM para gerenciamento de banco de dados
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Como Executar
 
-## Security Vulnerabilities
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/angelof4/api-clube-envio.git
+2. Banco de dados refatorado:
+    este projeto tem dependencia de um banco de dados refatorado, disponibilizado pelo link: 
+    ```bash
+    git clone https://github.com/angelof4/clube-de-envios-db-refactor.git
+3. apos realizar donwload do banco importa-lo
+4. Configurar o .ENV informando o nome do banco de dados
+    ```bash
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=clube_envios
+    DB_USERNAME=root
+    DB_PASSWORD=0000 //importante por a senha do seu mysql
+4. rodar os comandos:
+    ```bash
+    composer install
+    php artisan serve
+## usando postman para testar rotas
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# Rotas da API - Clube Envio
 
-## License
+## Registro de Usuário
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- **Endpoint**: `POST 127.0.0.1:8000/api/register`
+- **Descrição**: Registra um novo usuário.
+- **Body da Requisição**:
+    ```json
+    {
+      "email": "usuario@example.com",
+      "password": "senha",
+      "nome": "Nome do Usuário"
+    }
+    ```
+
+---
+
+## Login de Usuário
+
+- **Endpoint**: `POST 127.0.0.1:8000/api/login`
+- **Descrição**: Realiza a autenticação e obtém um token de acesso.
+- **Body da Requisição**:
+    ```json
+    {
+      "email": "usuario@example.com",
+      "password": "senha"
+    }
+    ```
+
+---
+
+## Cotação de Frete
+
+- **Endpoint**: `GET 127.0.0.1:8000/api/frete/cotacao?peso=250&cep_inicio=72800001&cep_destino=72800999`
+- **Descrição**: Obtém a cotação de fretes de acordo com os dados fornecidos: peso, CEP de início e CEP de destino.
+- **Parâmetros**:
+    - `peso`: Peso do pacote em gramas.
+    - `cep_inicio`: CEP de origem.
+    - `cep_destino`: CEP de destino.
+- **Requisitos**: Necessária autenticação para executar esta rota.
+
+---
+
+## Cotações de um Usuário
+
+- **Endpoint**: `GET 127.0.0.1:8000/api/frete/usuario/{userId}/cotacoes`
+- **Descrição**: Obtém as cotações associadas a um usuário específico.
+- **Parâmetros**:
+    - `userId`: ID do usuário cujas cotações devem ser recuperadas.
+- **Requisitos**: Necessária autenticação e informar o ID do usuário.
+
+---
+
+## Obter Cotação Específica
+
+- **Endpoint**: `GET 127.0.0.1:8000/api/frete/cotacao/{quoteId}`
+- **Descrição**: Obtém os dados de uma cotação específica pelo ID da cotação.
+- **Parâmetros**:
+    - `quoteId`: ID da cotação desejada.
+- **Requisitos**: Necessária autenticação.
+
+---
+
+### Observações
+- Todas as requisições que requerem autenticação devem incluir o token de acesso obtido no login.
+
